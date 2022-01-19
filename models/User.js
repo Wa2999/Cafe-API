@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
-  avatar: String,
+  avatar: {type:String,
+    default:"https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"},
   emailVerified: Boolean,
   reviews: [
     {
@@ -36,7 +37,7 @@ const signupJoi = Joi.object({
     .max(100)
     .required(),
   password: Joi.string().min(6).max(100).required(),
-  avatar: Joi.string().uri().min(6).max(1000).required(),
+  avatar: Joi.string().uri().min(6).max(1000).allow(""),
 });
 
 const loginJoi = Joi.object({

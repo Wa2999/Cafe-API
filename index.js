@@ -12,7 +12,7 @@ const reviews = require("./routes/reviews");
 
 //..........................connect to mongoose....................................
 mongoose
-  .connect(`mongodb+srv://cafeDB:${process.env.MANGODB_PASSWORD1}@cluster0.h2i6u.mongodb.net/cafeDB?retryWrites=true&w=majority`)
+  .connect(`mongodb+srv://cafeDB:${process.env.MANGODB_PASSWORD}@cluster0.h2i6u.mongodb.net/cafeDB?retryWrites=true&w=majority`)
   .then(() => {
     console.log("Connected to mongoDB");
   })
@@ -33,4 +33,4 @@ app.use("/api/coffeeShop", coffeeShop);
 //...........................server...........................................
 
 const port = 5000;
-app.listen(port, () => console.log("server is listening on port " + port));
+app.listen(process.env.PORT||port, () => console.log("server is listening on port " + port));

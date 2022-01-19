@@ -36,8 +36,8 @@ router.post("/signup", validateBody(signupJoi), async (req, res) => {
       port: 587,
       secure: false,
       auth: {
-        user: "wejdana299@gmail.com",
-        pass: "Wa*Aw123123",
+        user: process.env.SENDER_EMAIL,
+        pass: process.env.SENDER_PASSWORD,
       },
       tls: {
         rejectUnauthorized: false,
@@ -48,7 +48,7 @@ router.post("/signup", validateBody(signupJoi), async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: '"hii" <wejdana299@gmail.com>',
+      from: '"Confirm your account on CAFE" <wejdana299@gmail.com>',
       to: email,
       subject: "Email verification",
       html: `hello, plase click on this link to verify your email.
@@ -184,13 +184,19 @@ router.delete("/users/:id", checkAdmin, checkId, async (req, res) => {
   }
 });
 
+
 //.............................................get profile................................................................
 
 router.get("/profile", checkToken, async (req, res) => {
   const user = await User.findById(req.userId)
     .select("-__v -password")
     .populate("follows")
-    .populate("reviews");
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "coffeeShop",
+      },
+    });
   res.json(user);
 });
 

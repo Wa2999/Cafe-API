@@ -58,7 +58,7 @@ const AddReviweJoi = Joi.object({
   advice: Joi.string().min(5).max(200),
   recommend: Joi.boolean().default(true).required(),
   businessOutlook: Joi.boolean().default(true).required(),
-  LengthOfEmployment: Joi.number().min(0).max(70).required(),
+  lengthofEmployment: Joi.number().min(1).max(70).required(),
 });
 
 
