@@ -91,8 +91,8 @@ router.post("/login", validateBody(loginJoi), async (req, res) => {
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).send("password incorrect");
 
-    if (!user.emailVerified)
-      return res.status(403).send("user not verified,please check your email");
+    // if (!user.emailVerified)
+    //   return res.status(403).send("user not verified,please check your email");
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "15d",
