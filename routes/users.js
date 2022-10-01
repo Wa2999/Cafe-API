@@ -28,31 +28,11 @@ router.post("/signup", validateBody(signupJoi), async (req, res) => {
       email,
       password: hash,
       avatar,
-      // emailVerified: false,
       role: "User",
     });
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.SENDER_EMAIL,
-        pass: process.env.SENDER_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
+   
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "15d",
-    });
-
-    await transporter.sendMail({
-      from: '"Confirm your account on CAFE" <wejdana299@gmail.com>',
-      to: email,
-      subject: "Email verification",
-      html: `Hi there, plase click on this link to verify your email.
-       <a href='http://localhost:3000/email_verified/${token}'> verify email</a>`,
     });
     await user.save();
     res.json("DONE");
@@ -62,24 +42,6 @@ router.post("/signup", validateBody(signupJoi), async (req, res) => {
   }
 });
 //....................................validate Email.......................
-router.get("/verify_email/:token", async (req, res) => {
-  try {
-    const decryptedToken = jwt.verify(
-      req.params.token,
-      process.env.JWT_SECRET_KEY
-    );
-    const userId = decryptedToken.id;
-
-    const user = await User.findByIdAndUpdate(userId, {
-      $set: { emailVerified: true },
-    });
-    if (!user) return res.status(404).send("user not found");
-
-    res.send("user verified");
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
 //.........................................login.....................................................
 router.post("/login", validateBody(loginJoi), async (req, res) => {
   try {
